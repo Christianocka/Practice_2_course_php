@@ -22,16 +22,14 @@ class ToDoController extends Controller
         $validatedData = $request->validated();
 
         $task = Task::create([
-            'task' => $validatedData['task'],
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'] ?? null,
             'is_done' => false,
             'priority' => $validatedData['priority'] ?? 1,
-            'category' => $validatedData['category'] ?? null,
             'tags' => $validatedData['tags'] ?? [],
             'start_at' => $validatedData['start_at'] ?? null,
             'end_at' => $validatedData['end_at'] ?? null,
         ]);
-
-        dispatch(new \App\Models\Queue($task));
 
         return $this->apiResponse(true, 'Задача добавлена', $task);
     }
@@ -41,12 +39,12 @@ class ToDoController extends Controller
         $validatedData = $request->validated();
 
         $task = Task::findOrFail($id);
-        $task->task = $validatedData['task'];
-        $task->priority = $validatedData['priority'] ?? 1;
-        $task->category = $validatedData['category'] ?? null;
-        $task->tags = $validatedData['tags'] ?? [];
-        $task->start_at = $validatedData['start_at'] ?? null;
-        $task->end_at = $validatedData['end_at'] ?? null;
+        $task->title = $validatedData['title'] ?? $task->title;
+        $task->description = $validatedData['description'] ?? $task->description;
+        $task->priority = $validatedData['priority'] ?? $task->priority;
+        $task->tags = $validatedData['tags'] ?? $task->tags;
+        $task->start_at = $validatedData['start_at'] ?? $task->start_at;
+        $task->end_at = $validatedData['end_at'] ?? $task->end_at;
         $task->save();
 
         return $this->apiResponse(true, 'Задача обновлена', $task);

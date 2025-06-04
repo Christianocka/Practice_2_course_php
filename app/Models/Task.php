@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'id',
-        'task',
+        'title',
+        'description',
         'is_done',
-        'priority',
+        'priority'
+    ];
+
+    protected $casts = [
         'tags' => 'array',
         'start_at' => 'datetime',
         'end_at' => 'datetime',

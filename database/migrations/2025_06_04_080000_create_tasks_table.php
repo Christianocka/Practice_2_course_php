@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title'); 
-            $table->string('name')->nullable();
-            $table->text('description')->nullable();
+            $table->string('description') ->nullable();
+            $table->boolean('is_done')->default(false);
             $table->integer('priority')->default(1);
-            $table->string('category')->nullable();
+            $table->string('tags')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->timestamps();

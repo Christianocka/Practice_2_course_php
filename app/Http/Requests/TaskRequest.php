@@ -14,9 +14,9 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'task' => ['required', 'string', 'min:1', 'max:255'],
-            'priority' => ['nullable', 'integer', 'min:1', 'max:3'],
-            'category' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:50'],
+            'description' => ['required', 'string', 'min:1', 'max:255'],
+            'priority' => ['nullable', 'integer', 'min:1'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
             'start_at' => ['nullable', 'date'],
