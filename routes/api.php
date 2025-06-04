@@ -12,5 +12,5 @@ Route::patch('/tasks/{id}/refresh', [ToDoController::class, 'refresh']); // Из
 Route::delete('/tasks/{id}', [ToDoController::class, 'delete']); // Удалить задачу
 
 // Маршрут для авторизации пользователя
-Route::post('/login', [UserController::class, 'authorisation']);
+Route::post('/login', [UserController::class, 'authorization']);
 Route::post('/register', [UserController::class, 'register']); // Регистрация пользователя    

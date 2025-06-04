@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest as UserValidationRequest;
 use App\Models\User;
+use App\Traits\ApiResponse;
+use App\Http\Requests\UserLoginRequest as LoginValidationRequest;
+use App\Http\Requests\UserRegisterRequest as UserRegisterRequest;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
-    private function apiResponse($success, $message, $data = null, $status = 200)
-    {
-        return response()->json([
-            'success' => $success,
-            'message' => $message,
-            'data' => $data
-        ], $status);
-    }
+    use ApiResponse;
 
-    public function authorisation(UserValidationRequest $request)
+    public function authorisation(LoginValidationRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -39,7 +35,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function register(UserValidationRequest $request)
+    public function register(UserRegisterRequest $request)
     {
         $validatedData = $request->validated();
 
