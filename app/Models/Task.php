@@ -12,5 +12,16 @@ class Task extends Model
         'id',
         'task',
         'is_done',
+        'priority',
+        'category',
+        'tags',
+        'start_at',
+        'end_at',
+    ];
+
+    protected $casts = [
+        'tags' => 'array',
+        'start_at' => 'datetime',
+        'end_at' => 'datetime',
     ];
 }

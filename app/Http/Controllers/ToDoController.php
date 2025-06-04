@@ -2,41 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest as TaskValidationRequest;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
 class ToDoController extends Controller
 {
-    public function create(Request $request)
+    private function apiResponse($success, $message, $data = null, $status = 200)
     {
-        $validatedData = $request->validate([
-            'task' => ['required', 'string', 'min:1', 'max:255'],
-        ]);
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+            'data' => $data
+        ], $status);
+    }
+
+    public function create(TaskValidationRequest $request)
+    {
+        $validatedData = $request->validated();
 
         $task = Task::create([
             'task' => $validatedData['task'],
             'is_done' => false,
+            'priority' => $validatedData['priority'] ?? 1,
+            'category' => $validatedData['category'] ?? null,
+            'tags' => $validatedData['tags'] ?? [],
+            'start_at' => $validatedData['start_at'] ?? null,
+            'end_at' => $validatedData['end_at'] ?? null,
         ]);
-        return response()->json([
-            'message' => 'Задача добавлена', 
-            'task' => $task
-        ]);
+
+        dispatch(new \App\Models\Queue($task));
+
+        return $this->apiResponse(true, 'Задача добавлена', $task);
     }
 
-    public function update(Request $request, $id)
+    public function update(TaskValidationRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'new_task' => ['required', 'string', 'min:1', 'max:255'],
-        ]);
+        $validatedData = $request->validated();
 
         $task = Task::findOrFail($id);
-        $task->task = $validatedData['new_task'];
+        $task->task = $validatedData['task'];
+        $task->priority = $validatedData['priority'] ?? 1;
+        $task->category = $validatedData['category'] ?? null;
+        $task->tags = $validatedData['tags'] ?? [];
+        $task->start_at = $validatedData['start_at'] ?? null;
+        $task->end_at = $validatedData['end_at'] ?? null;
         $task->save();
 
-        return response()->json([
-            'message' => 'Задача обновлена', 
-            'task' => $task
-        ]);
+        return $this->apiResponse(true, 'Задача обновлена', $task);
     }
 
     public function refresh(Request $request, $id)
@@ -44,43 +57,28 @@ class ToDoController extends Controller
         $task = Task::find($id);
 
         if (!$task) {
-            return response()->json([
-                'message' => 'Задача не найдена'
-            ], 
-                404
-            );
+            return $this->apiResponse(false, 'Задача не найдена', null, 404);
         }
 
         $task->is_done = !$task->is_done;
         $task->save();
 
-        return response()->json([
-            'message' => 'Задача изменила статус', 
-            'is_done' => $task
-        ]);
+        return $this->apiResponse(true, 'Задача изменила статус', $task);
     }
 
     public function delete($id)
     {
         $task = Task::find($id);
         if (!$task) {
-            return response()->json([
-                'message' => 'Задача не найдена'
-            ], 
-                404
-            );
+            return $this->apiResponse(false, 'Задача не найдена', null, 404);
         }
         $task->delete();
-        return response()->json([
-            'message' => 'Задача удалена'
-        ]);
+        return $this->apiResponse(true, 'Задача удалена');
     }
 
     public function index()
     {
         $tasks = Task::all();
-        return response()->json([
-            'tasks' => $tasks
-        ]);
+        return $this->apiResponse(true, 'Список задач', $tasks);
     }
 }
