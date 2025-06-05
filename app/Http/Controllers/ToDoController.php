@@ -50,9 +50,14 @@ class ToDoController extends Controller
         return $this->apiResponse(true, 'Задача удалена');
     }
 
-    public function index()
+    public function index(TaskCreateRequest $request)
     {
-        $tasks = Task::all();
+        $filters = $request->only(['start_at', 'end_at', 'tags', 'title']);
+
+        $tasks = Task::with('children', 'files')
+        ->filters($filters)
+        ->get();
+
         return $this->apiResponse(true, 'Список задач', $tasks);
     }
 }

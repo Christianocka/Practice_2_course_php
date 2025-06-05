@@ -38,4 +38,25 @@ class Task extends Model
     {
         return $this->hasMany(File::class);
     }
+
+    public function scopeFilters($query, $filters)
+    {
+        if (!empty($filters['start_at'])) {
+            $query->whereDate('start_at', '>=', $filters['start_at']);
+        }
+
+        if (!empty($filters['end_at'])) {
+            $query->whereDate('end_at', '<=', $filters['end_at']);
+        }
+
+        if (!empty($filters['tags'])) {
+            $query->whereJsonContains('tags', $filters['tags']);
+        }
+
+        if (!empty($filters['title'])) {
+            $query->where('title', 'like', '%' . $filters['title'] . '%');
+        }
+
+        return $query;
+    }
 }
