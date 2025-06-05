@@ -10,6 +10,10 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')
+                ->references('id')->on('tasks')->onDelete('cascade');
+                
             $table->string('title'); 
             $table->string('description') ->nullable();
             $table->boolean('is_done')->default(false);

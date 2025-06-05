@@ -21,6 +21,7 @@ class TaskCreateRequest extends FormRequest
             'tags.*' => ['string', 'max:50'],
             'start_at' => ['nullable', 'date', 'date_format:d-m-Y'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
+            'parent_id' => ['nullable', 'exists:tasks,id'],
         ];
     }
 }

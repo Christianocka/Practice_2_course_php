@@ -11,6 +11,7 @@ class Task extends Model
 
     protected $fillable = [
         'id',
+        'parent_id',
         'title',
         'description',
         'is_done',
@@ -23,9 +24,18 @@ class Task extends Model
         'end_at' => 'datetime',
     ];
 
+    public function parent()
+    {
+        return $this->belongsTo(Task::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Task::class, 'parent_id')->with('children');
+    }
+
     public function files()
     {
         return $this->hasMany(File::class);
     }
-
 }

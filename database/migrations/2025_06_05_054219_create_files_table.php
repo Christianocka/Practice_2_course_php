@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('task_id');
-            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('task_id')
+                ->references('id')->on('tasks')->onDelete('cascade');
             $table->string('filename'); 
             $table->string('path');    
             $table->timestamps();

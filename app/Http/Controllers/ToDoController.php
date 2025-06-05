@@ -23,6 +23,7 @@ class ToDoController extends Controller
             'tags' => $validatedData['tags'] ?? [],
             'start_at' => $validatedData['start_at'] ?? null,
             'end_at' => $validatedData['end_at'] ?? null,
+            'parent_id' => $validatedData['parent_id'] ?? null,
         ]);
 
         return $this->apiResponse(true, 'Задача добавлена', $task);
