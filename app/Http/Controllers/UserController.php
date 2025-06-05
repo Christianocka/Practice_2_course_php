@@ -42,6 +42,7 @@ class UserController extends Controller
         $user = User::create([
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
+            'password_confirmation'=> $validatedData['password_confirmation'],
         ]);
         
         return $this->apiResponse(true, 'Пользователь добавлен', [

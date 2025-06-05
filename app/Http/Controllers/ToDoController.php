@@ -32,7 +32,7 @@ class ToDoController extends Controller
     {
         $validatedData = $request->validated();
 
-        $task = Task::findOrFail($id);
+        $task = Task::findOrFail(id: $id);
         $task->update($request->validated());
         $task->save();
 

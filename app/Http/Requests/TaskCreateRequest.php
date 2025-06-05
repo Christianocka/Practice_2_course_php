@@ -20,7 +20,7 @@ class TaskCreateRequest extends FormRequest
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
             'start_at' => ['nullable', 'date', 'date_format:d-m-Y'],
-            'end_at' => ['nullable', 'date', 'after_or_equal:start_at', 'date_format:d-m-Y'],
+            'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
         ];
     }
 }

@@ -22,4 +22,10 @@ class Task extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
     ];
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }
